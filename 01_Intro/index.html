@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple IndexedDB</title>
+    <link rel="stylesheet" href="./main.css" />
+  </head>
+  <body>
+    <header>
+      <h1>IndexedDB</h1>
+      <h2>Using idb-keyval library version 5</h2>
+    </header>
+    <main>
+      <p>
+        This example is using Jake Archibald's idb-keyval library for indexedDB.
+      </p>
+      <p>
+        IndexedDB can be treated like Local / SessionStorage with key values
+        pairs.
+      </p>
+      <p>The big differences between localStorage and IndexedDB are:</p>
+      <ul>
+        <li>
+          IndexedDB does not need to use the <code>JSON.parse</code> or
+          <code>JSON.stringify</code> methods.
+        </li>
+        <li>
+          IndexedDB can be used from a webpage <strong>OR</strong> Service
+          Worker.
+        </li>
+        <li>IndexedDB can store BLOBs (binary data).</li>
+      </ul>
+      <p>The <strong>idb-keyval</strong> library does not:</p>
+      <ul>
+        <li>...allow for multiple stores/collections per database.</li>
+        <li>...have cursors.</li>
+        <li>...expose transactions.</li>
+      </ul>
+    </main>
+    <script type="module" src="./app.js"></script>
+    <!--
+    There is an alternative IIFE version to load without modules
+    <script src="https://cdn.jsdelivr.net/npm/idb-keyval@5/dist/iife/index.js"></script>
+    -->
+  </body>
+</html>
