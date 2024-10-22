@@ -41,7 +41,74 @@ const IDB = (function init(){
     }
   })
 
-  document.whiskeyForm.addEventListener('submit' , (ev) => {
+  document.getElementById('btnUpdate').addEventListener('click' , (ev) => {
+    ev.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const country = document.getElementById('country').value.trim();
+    const age = parseInt( document.getElementById('age').value );
+    const owned = document.getElementById('isOwned').checked;
+
+    const key = document.whiskeyForm.getAttribute('data-key');
+
+    if(key){
+      const whiskey = {
+        id: key,
+        name,
+        country,
+        age,
+        owned
+      }
+  
+      const tx = makeTX( 'whiskeyStore' , 'readwrite');
+      tx.oncomplete = (ev) => {
+        console.log(ev)
+        buildList()
+        clearForm();
+      }
+      const store = tx.objectStore('whiskeyStore');
+      const request = store.put(whiskey);
+
+      request.onsuccess = (ev) => {
+        console.log('successfully updated an object');
+        // move on to next request in the reansaction or commit the transaction
+      }
+
+      request.onerror = (err) => {
+        console.log('error in request to delete');
+      }
+
+    }
+  })
+
+  document.getElementById('btnDelete').addEventListener('click' , (ev) => {
+    ev.preventDefault();
+
+    const key = document.whiskeyForm.getAttribute('data-key');
+
+    if(key){
+      const tx = makeTX( 'whiskeyStore' , 'readwrite');
+      tx.oncomplete = (ev) => {
+        console.log(ev)
+        buildList()
+        clearForm();
+      }
+      const store = tx.objectStore('whiskeyStore');
+      const request = store.delete(key);  //request a delete
+
+      request.onsuccess = (ev) => {
+        console.log('successfully deleted an object');
+        // move on to next request in the reansaction or commit the transaction
+      }
+
+      request.onerror = (err) => {
+        console.log('error in request to delete');
+      }
+    }
+
+  })
+
+  document.getElementById('btnAdd').addEventListener('click' , (ev) => {
     ev.preventDefault();
     // one of the form buttons was clicked;
     const name = document.getElementById('name').value.trim();
@@ -98,8 +165,8 @@ const IDB = (function init(){
       document.getElementById('country').value = whiskey.country;
       document.getElementById('age').value = whiskey.age;
       document.getElementById('isOwned').checked = whiskey.owned;
-      document.whiskeyForm.setAttribute('data-key' , whiskey.id);
 
+      document.whiskeyForm.setAttribute('data-key' , whiskey.id);
     }
 
     req.onerror = (err) => {
@@ -150,5 +217,6 @@ const IDB = (function init(){
   function clearForm(ev){
     if(ev) ev.preventDefault();
     document.whiskeyForm.reset();
+    document.whiskeyForm.removeAttribute('data-key');
   }
 })()
